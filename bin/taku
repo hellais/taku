@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+import os
+import sys
+
+## XXX mchack
+this_directory = os.path.dirname(__file__)
+root = os.path.abspath(os.path.join(this_directory, '..'))
+sys.path.insert(0, root)
+## fin.
+
+import argparse
+
+parser = argparse.ArgumentParser(description='Collect some stats on the the social networks, just like an octopus!')
+parser.add_argument('-i', '--init', action='store_true')
+parser.add_argument('-k', '--keyword')
+parser.add_argument('-c', '--config')
+
+args = parser.parse_args()
+if args.init:
+    from taku import db
+    db.init()
+
+if not args.keyword:
+    parser.print_help()
+    sys.exit(1)
+
+from taku import twitter_stream
+
+twitter_stream.monitor(args.keyword)
